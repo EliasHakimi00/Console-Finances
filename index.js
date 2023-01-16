@@ -92,21 +92,25 @@ A = finances.length
 console.log(A)
 
 // 2. The net total amount of Profit/Losses over the entire period.
-let sum = finances.reduce((acc, curr) => acc + curr[1], 0);
+let sum = (finances.reduce((acc, curr) => acc + curr[1], 0)).toFixed(2);
 console.log(sum);
-B = sum
+
 
 // 3. The average of the changes in Profit/Losses over the entire period.
-let difference = 0
-for (let i = 0; i < finances.length; i++) {
-    if (i>0) {
-        difference += finances [i][1] - finances[i-1][1];
-    }
+let changes = [];
+for (let i = 1; i < finances.length; i++) {
+  let change = finances[i][1] - finances[i-1][1];
+  changes.push(change);
 }
-C = difference/A
-console.log(C)
-D = C.toFixed(2)
-console.log(D)
+
+let totalChange = changes.reduce((a, b) => a + b, 0);
+let avgChange = (totalChange / changes.length).toFixed(2);
+
+if (avgChange > 0) {
+  console.log("The average month-to-month change is a positive change of " + avgChange);
+} else {
+  console.log("The average month-to-month change is a negative change of " + avgChange);
+}
 
 // 4. The greatest increase in profits (date and amount) over the entire period.
 let greatestIncrease = 0;
@@ -115,10 +119,11 @@ for (let i = 1; i < finances.length; i++) {
   let previousValue = finances[i - 1][1];
   let increase = currentValue - previousValue;
   if (increase > greatestIncrease) {
-    greatestIncrease = increase;
+    greatestIncrease = increase.toFixed(2);
+    greatestIncreaseMonthYear = finances[i][0];
   }
 }
-console.log(greatestIncrease);
+console.log(greatestIncreaseMonthYear,greatestIncrease);
 
 // 5. The greatest decrease in profits (date and amount) over the entire period.
 let greatestDecrease = 0;
@@ -127,9 +132,11 @@ for (let i = 1; i < finances.length; i++) {
     let previousValue = finances[i-1][1];
     let decrease = previousValue - currentValue;
     if (decrease > greatestDecrease) {
-        greatestDecrease = decrease
+        greatestDecrease = decrease.toFixed(2);
+        greatestDecreaseMonthYear = finances[i][0];
     }
 }
-console.log(greatestDecrease)
+console.log(greatestDecreaseMonthYear,greatestDecrease)
 
 // Final Output 
+alert("Financial Analysis\n----------------\nTotal Months: " + A + "\nTotal: $" + sum + "\nAverage  Change: $" + avgChange + "\nGreatest Increase in Profits: $" + greatestIncrease + " " + greatestIncreaseMonthYear +  "\nGreatest Decrease in Profits: $" + greatestDecrease + " " +greatestDecreaseMonthYear);
